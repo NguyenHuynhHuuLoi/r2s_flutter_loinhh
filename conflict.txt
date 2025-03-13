@@ -1,0 +1,6 @@
+-Báo conflict  vì khi checkout ra lúc ban đầu là có dòng A cùng chổ có cùng nội dung A nhưng do thay đổi  khi checkout ra đổi thành nội dụng thành B . khiến git báo conflict vì nội dung đã bị sửa đổi thành B yêu cầu mình sửa lại 
+
+Cách để sửa:
+- Có thể sửa trực tiếp trên git.
+- Sửa theo kiểu rì base.
+- Rì base , như kiểu update vào base mới làm việc trên đó, không cần update lại cái ban đầu. Như kiểu khi có sự thay đổi  hiện tại có A,B . Quyết định sự tiếp là chọn làm việc tiếp B hay A.
