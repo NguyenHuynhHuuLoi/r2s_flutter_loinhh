@@ -12,12 +12,12 @@ void main() {
     arr.add(int.parse(stdin.readLineSync()!));
   }
 
-  int sum = 0;
-  for (int i = 0; i < n; i++){
-    sum += arr[i];
-  }
+  int sum = arr.reduce((value, element) => value + element);
+  num average = sum / arr.length;
 
-  double average = sum / n ;
   print('Trung bình mảng: $average');
-  
+
+
+
+
 }
