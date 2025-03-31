@@ -1,0 +1,1 @@
+ D:\\ProjectIDEA\\r2s_flutter_loinhh\\04_flutter\\buoi01\\.dart_tool\\flutter_build\\79fc4afd531180d886209a09a65616d0\\native_assets.json: 
