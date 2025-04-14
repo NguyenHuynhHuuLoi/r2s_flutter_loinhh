@@ -60,6 +60,7 @@ class ProductDatabase {
       categoryId INTEGER,
       quantity INTEGER,
       date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,  
+      user_name TEXT DEFAULT 'Lợi Nguyễn',
       FOREIGN KEY (categoryId) REFERENCES categories(id)
     )
   ''');
@@ -96,6 +97,10 @@ class ProductDatabase {
       map.removeWhere(
             (key, value) => (key == 'id' && (value == null || value == 0)),
       );
+
+      // Thêm `user_name` vào map (nếu chưa có)
+      map['user_name'] = 'Lợi Nguyễn';  // Gán giá trị mặc định cho user_name
+
 
       final id = await db.insert('products', map);
       return id;
@@ -197,7 +202,7 @@ class ProductDatabase {
 
       // Tạo dữ liệu CSV với encoding UTF-8
       List<List<dynamic>> rows = [
-        ["ID", "Tên sản phẩm", "Mô tả", "Danh mục", "Số lượng", "Ngày"],  // Tiêu đề các cột
+        ["ID", "Tên sản phẩm", "Mô tả", "Danh mục", "Số lượng", "Ngày", "Người tạo"],  // Tiêu đề các cột
       ];
 
       for (var product in products) {
@@ -212,7 +217,8 @@ class ProductDatabase {
           product.description ?? '',
           category.name,
           product.quantity,
-          product.date ?? 'No date',  // Đảm bảo thêm trường date vào CSV
+          product.date ?? 'No date',
+          product.userName ?? 'Lợi Nguyễn',  // Gán giá trị mặc định cho user_name
         ]);
       }
 

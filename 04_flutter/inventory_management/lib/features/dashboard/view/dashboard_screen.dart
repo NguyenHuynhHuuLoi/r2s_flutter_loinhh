@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:fl_chart/fl_chart.dart';
-import 'package:flutter/services.dart';
-import 'package:inventory_management/features/dashboard/controller/dashboard_controller.dart';
-import 'package:inventory_management/features/products/view/product_list_screen.dart';
 import 'package:provider/provider.dart';
+import 'package:fl_chart/fl_chart.dart';
+import 'package:inventory_management/features/dashboard/controller/dashboard_controller.dart';
 
-import '../../settings/view/settings_screen.dart';
+import '../../../routes/navigation_helper.dart';
 
 class DashboardScreen extends StatefulWidget {
   @override
@@ -23,32 +21,16 @@ class _DashboardScreenState extends State<DashboardScreen> {
     });
   }
 
-  void _handleMenuOption(String value) {
-    switch (value) {
-      case 'products':
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (_) => ProductListScreen()),
-        ).then((_) {
-          // Cập nhật dữ liệu khi quay lại từ ProductList
-          Provider.of<DashboardController>(context, listen: false).loadData();
-        });
-        break;
-      case 'exit':
-        Navigator.of(context).pop();
-        break;
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     final controller = Provider.of<DashboardController>(context);
-    final isDarkMode = Theme.of(context).brightness == Brightness.dark; // Kiểm tra chế độ tối
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
 
     return Scaffold(
       appBar: AppBar(
         title: Text('Dashboard'),
         backgroundColor: isDarkMode ? Colors.black : Colors.white,
+        automaticallyImplyLeading: false, // xóa nút back mặc định
         titleTextStyle: TextStyle(
           color: isDarkMode ? Colors.white : Colors.black,
           fontSize: 35,
@@ -59,19 +41,11 @@ class _DashboardScreenState extends State<DashboardScreen> {
             icon: Icon(Icons.more_vert, color: isDarkMode ? Colors.white : Colors.black),
             onSelected: (value) {
               if (value == 'products') {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (_) => ProductListScreen()),
-                ).then((_) {
-                  Provider.of<DashboardController>(context, listen: false).loadData();
-                });
+                NavigationHelper.navigateToProductList(context);  // Sử dụng NavigationHelper
               } else if (value == 'settings') {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (_) => SettingsScreen()),
-                );
+                NavigationHelper.navigateToSettings(context);  // Sử dụng NavigationHelper
               } else if (value == 'exit') {
-                SystemNavigator.pop();
+                NavigationHelper.exitApp(context);  // Thoát ứng dụng
               }
             },
             itemBuilder: (BuildContext context) => [

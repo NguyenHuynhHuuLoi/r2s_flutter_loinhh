@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+import 'package:inventory_management/routes/navigation_helper.dart';  
+import 'package:inventory_management/data/datasources/product_database.dart';
 import 'package:inventory_management/data/models/category.dart';
 import 'package:inventory_management/data/models/product.dart';
-import 'package:inventory_management/features/settings/view/settings_screen.dart';
 import 'package:inventory_management/features/products/controller/add_product_screen.dart';
-import 'package:inventory_management/data/datasources/product_database.dart';
 
-import '../../dashboard/view/dashboard_screen.dart';
+
+import '../../../routes/navigation_helper.dart';
 
 class ProductListScreen extends StatefulWidget {
   const ProductListScreen({super.key});
@@ -130,9 +130,9 @@ class _ProductListScreenState extends State<ProductListScreen> {
   }
 
   String _getQuantityStatus(int quantity) {
-    if (quantity < 100) return 'Near';
-    if (quantity >= 100 && quantity < 200) return 'Sang';
-    return 'Each';
+    if (quantity <= 20) return 'Near';
+    if (quantity > 20 && quantity <= 100) return 'Low';
+    return 'Available';
   }
 
   void _navigateToEditProduct(Product product) async {
@@ -167,41 +167,17 @@ class _ProductListScreenState extends State<ProductListScreen> {
           PopupMenuButton<String>(
             onSelected: (value) {
               if (value == 'dashboard') {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (_) => DashboardScreen()),
-                );
+                NavigationHelper.navigateToDashboard(context);  // Sử dụng NavigationHelper
               } else if (value == 'settings') {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (_) => SettingsScreen()),
-                );
+                NavigationHelper.navigateToSettings(context);  // Sử dụng NavigationHelper
               } else if (value == 'exit') {
-                SystemNavigator.pop();
+                NavigationHelper.exitApp(context);  // Thoát ứng dụng
               }
             },
             itemBuilder: (context) => [
-              PopupMenuItem<String>(
-                value: 'dashboard',
-                child: Text(
-                  'Dashboard',
-                  style: TextStyle(color: isDarkMode ? Colors.white : Colors.black),
-                ),
-              ),
-              PopupMenuItem<String>(
-                value: 'settings',
-                child: Text(
-                  'Settings',
-                  style: TextStyle(color: isDarkMode ? Colors.white : Colors.black),
-                ),
-              ),
-              PopupMenuItem<String>(
-                value: 'exit',
-                child: Text(
-                  'Exit',
-                  style: TextStyle(color: isDarkMode ? Colors.white : Colors.black),
-                ),
-              ),
+              PopupMenuItem<String>(value: 'dashboard', child: Text('Dashboard')),
+              PopupMenuItem<String>(value: 'settings', child: Text('Settings')),
+              PopupMenuItem<String>(value: 'exit', child: Text('Exit')),
             ],
           ),
           IconButton(

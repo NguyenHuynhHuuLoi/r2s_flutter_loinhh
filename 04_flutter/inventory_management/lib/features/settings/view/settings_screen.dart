@@ -91,7 +91,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       InkWell(
                         splashColor: Colors.blue.withOpacity(0.1),
                         highlightColor: Colors.blue.withOpacity(0.05),
-                        onTap: () => _exportCSV(context),
+                        onTap: () => _showExportCSVConfirmation(context),
                         child: Row(
                           children: [
                             Text(
@@ -112,7 +112,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
             SizedBox(height: 15),
             // Card chức năng Reset Database
             InkWell(
-              onTap: _isResetting ? null : _resetDatabase,
+              onTap: _isResetting ? null : () => _showResetDatabaseConfirmation(context),
               child: Container(
                 width: double.infinity,
                 height: 100,
@@ -145,6 +145,69 @@ class _SettingsScreenState extends State<SettingsScreen> {
     );
   }
 
+  // Hiển thị hộp thoại xác nhận cho việc reset database
+  Future<void> _showResetDatabaseConfirmation(BuildContext context) async {
+    final confirm = await showDialog<bool>(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Reset Database'),
+          content: Text('Are you sure you want to reset the database? This action cannot be undone.'),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(false);
+              },
+              child: Text('Cancel'),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(true);
+              },
+              child: Text('Yes'),
+            ),
+          ],
+        );
+      },
+    );
+
+    if (confirm == true) {
+      _resetDatabase();
+    }
+  }
+
+  // Hiển thị hộp thoại xác nhận cho việc export CSV
+  Future<void> _showExportCSVConfirmation(BuildContext context) async {
+    final confirm = await showDialog<bool>(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Export Data'),
+          content: Text('Do you want to export the data to CSV?'),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(false);
+              },
+              child: Text('Cancel'),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(true);
+              },
+              child: Text('Yes'),
+            ),
+          ],
+        );
+      },
+    );
+
+    if (confirm == true) {
+      _exportCSV(context);
+    }
+  }
+
+  // Reset database
   Future<void> _resetDatabase() async {
     setState(() {
       _isResetting = true;
@@ -173,6 +236,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
     }
   }
 
+  // Export CSV
   Future<void> _exportCSV(BuildContext context) async {
     try {
       final filePath = await ProductDatabase().exportProductsToCSV(context);
